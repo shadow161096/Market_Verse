@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "framework": "nextjs",
+    "buildCommand": "npm run build",
+    "installCommand": "npm ci",
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "https://api.marketverse.com/api/v1/$1"
+        }
+    ]
+}
