@@ -22,7 +22,7 @@ export function useGPUQuality() {
                 } else {
                     setQuality('high');
                 }
-            } catch (error) {
+            } catch {
                 console.warn('GPU detection failed, defaulting to medium quality');
                 setQuality('medium');
             } finally {

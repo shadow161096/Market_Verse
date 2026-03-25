@@ -2,6 +2,12 @@ import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
+interface SessionPayload {
+    id: string;
+    role: string;
+    email: string;
+}
+
 const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET // No fallback — fails loudly if not configured
 );
@@ -23,15 +29,15 @@ export async function signToken(payload: { id: string; role: string }) {
         .sign(JWT_SECRET);
 }
 
-export async function verifyToken(token: string) {
+export async function verifyToken(token: string): Promise<SessionPayload | null> {
     try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         return {
             id: payload.sub as string,
-            role: payload.role as string,
-            email: payload.email as string
+            role: payload["role"] as string,
+            email: payload["email"] as string
         };
-    } catch (e) {
+    } catch {
         return null;
     }
 }
