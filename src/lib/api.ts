@@ -60,13 +60,13 @@ export async function fetchApi<T>(
 
 export const api = {
     get: <T>(endpoint: string, options?: RequestInit) => fetchApi<T>(endpoint, { ...options, method: 'GET' }),
-    post: <T>(endpoint: string, data?: any, options?: RequestInit) => fetchApi<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(data) }),
-    put: <T>(endpoint: string, data?: any, options?: RequestInit) => fetchApi<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(data) }),
+    post: <T>(endpoint: string, data?: unknown, options?: RequestInit) => fetchApi<T>(endpoint, { ...options, method: 'POST', body: JSON.stringify(data) }),
+    put: <T>(endpoint: string, data?: unknown, options?: RequestInit) => fetchApi<T>(endpoint, { ...options, method: 'PUT', body: JSON.stringify(data) }),
     delete: <T>(endpoint: string, options?: RequestInit) => fetchApi<T>(endpoint, { ...options, method: 'DELETE' }),
 
     products: {
-        list: (page = 1, limit = 20) => fetchApi<any>(`/products?page=${page}&limit=${limit}`),
-        search: (query: string, page = 1, limit = 20) => fetchApi<any>(`/products/search?q=${query}&page=${page}&limit=${limit}`),
-        get: (slug: string) => fetchApi<any>(`/products/${slug}`),
+        list: (page = 1, limit = 20) => fetchApi<unknown>(`/products?page=${page}&limit=${limit}`),
+        search: (query: string, page = 1, limit = 20) => fetchApi<unknown>(`/products/search?q=${query}&page=${page}&limit=${limit}`),
+        get: (slug: string) => fetchApi<unknown>(`/products/${slug}`),
     }
 };

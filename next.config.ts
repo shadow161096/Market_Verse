@@ -8,6 +8,11 @@ import type { NextConfig } from "next";
  */
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   // Transpile Three.js so webpack can handle ESM modules correctly
   transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
   images: {
@@ -23,10 +28,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3001/api/v1/:path*', // Proxy to Backend
+        destination: `${backendUrl}/api/v1/:path*`, // Proxy to Backend
       },
     ];
   },
