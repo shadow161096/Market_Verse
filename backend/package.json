@@ -6,17 +6,40 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "//build": "Compiles the entire NestJS TypeScript source into optimized JavaScript in the dist/ folder using the NestJS CLI and TypeScript compiler. This is the mandatory first step before running the application in production. It resolves all TypeScript decorators, dependency injection metadata, and path aliases. The output dist/ folder is what the Docker container actually executes in production. Run this after pulling new code changes to ensure the distribution is up to date.",
     "build": "nest build",
+
+    "//format": "Runs Prettier across all TypeScript source files in src/ and test/ to automatically format the code to a consistent style. Fixes indentation, quote styles, trailing commas, and line lengths defined in .prettierrc. This is a non-destructive operation — it modifies files in place, reformatting them without changing any logic. Run this before committing code to maintain a consistent coding style across the team. Pair this with the lint script to ensure both style and quality are correct.",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+
+    "//start": "Starts the NestJS application once using the compiled TypeScript source directly (not the dist/ build). This is a lightweight way to run the application without a full compile step, useful for quick checks. It does not watch for file changes, so any modifications to source files require a manual server restart. Do not use this in production — use start:prod instead which runs from the optimized dist/ bundle. Most useful for quickly running on a staging machine.",
     "start": "nest start",
+
+    "//start:dev": "Starts the NestJS development server with file-watching enabled via the --watch flag. Any time you save a TypeScript file, the server automatically recompiles and restarts, making development fast and iterative. This is the command you should run locally during active backend development. Includes full source maps so any stack traces point to the correct TypeScript line numbers. Never run this in production as it carries a significant overhead from the file watcher.",
     "start:dev": "nest start --watch",
+
+    "//start:debug": "Starts the NestJS server in watch mode with the Node.js debugger enabled on port 9229. Allows you to attach a debugger (like Chrome DevTools or VS Code's built-in debugger) to set breakpoints, inspect variables, and step through the code in real time. Invaluable for diagnosing complex bugs that console.log cannot solve. Use this whenever you need to deeply understand the execution flow of a request through the NestJS middleware, guards, and services. Remember to disconnect the debugger client before closing the server.",
     "start:debug": "nest start --debug --watch",
+
+    "//start:prod": "Runs the production build of the application directly from the compiled dist/main.js file using raw Node.js. This is the command that the Docker container's entrypoint uses to serve the live production API. It has no file watching, no TypeScript overhead, and no source map generation — just the raw, maximum-performance JavaScript bundle. Requires 'npm run build' to have been executed first. This is what Railway and Render run to serve your backend to the world.",
     "start:prod": "node dist/main",
+
+    "//lint": "Runs ESLint with the --fix flag across all TypeScript source files in src/, apps/, libs/, and test/. Automatically fixes any auto-correctable problems (like missing semicolons or wrong quote types) in place, and reports errors that need manual fixing. This enforces code quality, TypeScript strictness, and prevents anti-patterns before they reach production. Railway runs a version of this as part of the build step and will fail the deployment if blocking errors are found. Run this before every commit.",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+
+    "//test": "Runs the Jest test suite once across all files matching the *.spec.ts pattern in the src/ directory. Validates the unit tests for every NestJS service, controller, guard, and pipe in the application. Exits with a non-zero code (failure) if any test fails, making it suitable for CI/CD pipelines like GitHub Actions. Run this to ensure new features haven't broken existing functionality. Results are displayed in the terminal with details on passed, failed, and skipped tests.",
     "test": "jest",
+
+    "//test:watch": "Runs the Jest test suite in interactive watch mode, re-running only affected tests whenever a source file is saved. Provides an interactive menu to filter which tests run, run all tests, or run only failing tests. Ideal for test-driven development (TDD) where you write tests first and then write the implementation. Much faster than running the full suite repeatedly during active development. Press 'q' to quit the watch mode when done.",
     "test:watch": "jest --watch",
+
+    "//test:cov": "Runs the full Jest test suite and generates a detailed code coverage report in the coverage/ directory. Shows exactly what percentage of each file's lines, branches, functions, and statements are covered by tests. Export this as HTML (in coverage/lcov-report/index.html) to visually browse which lines need more testing. Aim for above 80% coverage on critical services. Use this to enforce testing quality before merging large pull requests.",
     "test:cov": "jest --coverage",
+
+    "//test:debug": "Runs Jest tests in a single serial thread with the Node.js inspector enabled for full debugging of tests. Allows you to attach a debugger and set breakpoints inside test files to inspect variables and step through assertions. The --runInBand flag prevents Jest from spawning worker processes, which is required for the debugger to work correctly. Use this when a failing test is deeply confusing and you cannot determine the cause from the test output alone. Requires attaching a debugger to the Node process on port 9229.",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+
+    "//test:e2e": "Runs the full end-to-end (E2E) test suite using a dedicated Jest configuration defined in test/jest-e2e.json. E2E tests simulate real HTTP requests against a fully running NestJS application instance, testing the entire stack from route to database and back. This is a higher-level test than unit tests and validates that entire user flows work correctly. Requires a running test database to be configured in the test environment. Run this before every production deployment to ensure no critical API flows are broken.",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {

@@ -3,10 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "//dev": "Starts the Next.js development server on localhost:3000 with live hot-module replacement. All changes to source files will reflect instantly in the browser without a full page reload. This is the primary command you run during local development. It enables React 19 concurrent mode features and automatically configures fast compilation. Never run this in a production environment.",
     "dev": "next dev",
+
+    "//build": "Compiles the entire Next.js application into an optimized, static production bundle. Runs ESLint against all source files and will FAIL the build if any errors exist (this is what Railway/Vercel runs). Generates the .next folder containing server-rendered pages, client bundles, and optimized assets. Tree-shakes unused code and minifies all JavaScript and CSS for maximum performance. Run this locally to verify the project builds clean before committing.",
     "build": "next build",
+
+    "//start": "Starts the compiled Next.js application from the .next production bundle on port 3000. Requires 'npm run build' to have been run first — it will crash otherwise. This is the command Docker and production servers use to serve the live website. Unlike 'dev', this server is fully optimized, multi-threaded, and has no hot reloading. Use this to do a final local check of the production build before deploying.",
     "start": "next start",
-    "lint": "eslint"
+
+    "//lint": "Runs ESLint statically across the entire codebase to enforce TypeScript type safety and code quality rules. Catches issues like unused variables, incorrect any types, and style violations defined in eslint.config.mjs. This runs automatically as part of 'npm run build' and will block deployment if errors are present. Run this manually to catch problems early before committing code. Fix all errors before pushing to avoid breaking the CI/CD pipeline.",
+    "lint": "eslint",
+
+    "//create-admin": "A one-time admin provisioning script used to bootstrap the first superuser account in the PostgreSQL database. Reads the target credentials from environment variables and uses bcrypt to securely hash the password before inserting the record. This script bypasses normal registration flow and directly inserts a privileged role record into the database. Only run once on a fresh deployment to create the initial admin account. Never expose or commit the credentials used with this script.",
+    "create-admin": "npx tsx create-admin.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
